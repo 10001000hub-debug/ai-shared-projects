@@ -8,5 +8,5 @@
 - a8 リンク検証のリダイレクト多段ケース要確認
 
 ## バトン
-- 次の担当AI: Claude Code
-- 指示: orchestrator CLI を最小構成で実装（I/O はスキーマ準拠）
+- 次の担当AI: Gemini / Claude
+- 指示: JSON Schemaに基づくorchestratorCLI実装、既存/home/tkr/affiliate_ai_qualityコードとの統合検証を実行

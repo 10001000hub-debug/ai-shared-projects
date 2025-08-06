@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/affiliate-ai-quality/schemas/audit_output_schema.json",
+  "title": "Affiliate Content Audit Output Schema",
+  "description": "Output schema for AI-powered affiliate content quality evaluation results",
+  "type": "object",
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^audit_[0-9]{14}$",
+      "description": "Unique audit identifier (format: audit_YYYYMMDDHHMMSS)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Audit execution timestamp in ISO 8601 format"
+    },
+    "overall_score": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120,
+          "description": "Total quality score (0-120 points)"
+        },
+        "grade": {
+          "type": "string",
+          "enum": ["ELITE", "EXCELLENT", "GOOD", "FAIR", "POOR"],
+          "description": "Quality grade (ELITE≥114, EXCELLENT≥100, GOOD≥80, FAIR≥60, POOR<60)"
+        },
+        "auto_publish_eligible": {
+          "type": "boolean",
+          "description": "Whether content meets auto-publish criteria"
+        }
+      },
+      "required": ["total", "grade", "auto_publish_eligible"]
+    },
+    "detailed_scores": {
+      "type": "object",
+      "properties": {
+        "seo_optimization": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15,
+          "description": "SEO optimization score (0-15 points)"
+        },
+        "content_quality": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "Content quality and readability score (0-20 points)"
+        },
+        "affiliate_integration": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "Natural affiliate link integration score (0-20 points)"
+        },
+        "link_validity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15,
+          "description": "ASP link validity and redirect score (0-15 points)"
+        },
+        "user_value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "User value and actionability score (0-20 points)"
+        },
+        "compliance": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Legal compliance and disclosure score (0-10 points)"
+        },
+        "conversion_potential": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15,
+          "description": "Conversion potential score (0-15 points)"
+        },
+        "technical_quality": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Technical formatting and structure score (0-5 points)"
+        }
+      },
+      "required": ["seo_optimization", "content_quality", "affiliate_integration", "link_validity", "user_value", "compliance", "conversion_potential", "technical_quality"]
+    },
+    "improvements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["seo", "content", "affiliate", "links", "value", "compliance", "conversion", "technical"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "major", "minor", "suggestion"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable improvement suggestion"
+          },
+          "impact_points": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Potential score improvement if addressed"
+          }
+        },
+        "required": ["category", "severity", "description", "impact_points"]
+      },
+      "maxItems": 20
+    },
+    "link_validation_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "original_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "final_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["valid", "redirect", "broken", "suspicious", "blocked"]
+          },
+          "redirect_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of redirects encountered"
+          },
+          "response_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Response time in milliseconds"
+          }
+        },
+        "required": ["original_url", "status"]
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "evaluator_version": {
+          "type": "string",
+          "description": "Quality evaluator version"
+        },
+        "processing_time_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total processing time"
+        },
+        "ai_model_used": {
+          "type": "string",
+          "description": "AI model used for evaluation"
+        },
+        "content_length": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Character count of analyzed content"
+        }
+      }
+    }
+  },
+  "required": ["audit_id", "timestamp", "overall_score", "detailed_scores", "improvements", "link_validation_results"]
+}

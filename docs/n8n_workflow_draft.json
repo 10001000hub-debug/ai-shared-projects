@@ -1,0 +1,65 @@
+{
+  "name": "Affiliate Content Quality Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "functionCode": "// Content Generation Node\nconst input = items[0].json;\n\nconst contentPrompt = `Create affiliate content for:\nProduct: ${input.product_name}\nKeyword: ${input.target_keyword}\nCategory: ${input.category}\nASP Provider: ${input.asp_provider}\n\nRequirements:\n- 800-1200 words\n- Natural affiliate link integration\n- SEO optimized\n- User-focused value\n- Include product comparisons\n- Call-to-action sections`;\n\nreturn [{\n  json: {\n    generated_content: {\n      title: `Best ${input.product_name} Reviews 2025 - Complete Guide`,\n      body: \"[Generated content placeholder - integrate with Claude/GPT-4 API]\",\n      meta: {\n        target_keyword: input.target_keyword,\n        product_category: input.category,\n        asp_provider: input.asp_provider,\n        word_count: 1000,\n        generation_timestamp: new Date().toISOString()\n      }\n    },\n    asp_links: input.asp_links || [],\n    original_input: input\n  }\n}];"
+      },
+      "name": "Content Generator",
+      "type": "n8n-nodes-base.function",
+      "position": [250, 300],
+      "id": "content-generator"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Quality Evaluation Node\nconst contentData = items[0].json.generated_content;\nconst aspLinks = items[0].json.asp_links;\n\n// Simulate 8-axis 120-point evaluation\nconst scores = {\n  seo_optimization: Math.floor(Math.random() * 5) + 11, // 11-15\n  content_quality: Math.floor(Math.random() * 5) + 16,  // 16-20\n  affiliate_integration: Math.floor(Math.random() * 5) + 16, // 16-20\n  link_validity: Math.floor(Math.random() * 3) + 13,    // 13-15\n  user_value: Math.floor(Math.random() * 4) + 17,      // 17-20\n  compliance: Math.floor(Math.random() * 2) + 9,       // 9-10\n  conversion_potential: Math.floor(Math.random() * 4) + 12, // 12-15\n  technical_quality: 5 // Max points\n};\n\nconst totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);\nconst grade = totalScore >= 114 ? 'ELITE' : \n              totalScore >= 100 ? 'EXCELLENT' :\n              totalScore >= 80 ? 'GOOD' :\n              totalScore >= 60 ? 'FAIR' : 'POOR';\n\nconst improvements = [];\nif (scores.seo_optimization < 14) {\n  improvements.push({\n    category: 'seo',\n    severity: 'major',\n    description: 'Add more target keyword variations and meta descriptions',\n    impact_points: 3\n  });\n}\nif (scores.affiliate_integration < 18) {\n  improvements.push({\n    category: 'affiliate',\n    severity: 'minor',\n    description: 'Improve natural flow of affiliate link placements',\n    impact_points: 2\n  });\n}\n\nreturn [{\n  json: {\n    audit_id: `audit_${new Date().toISOString().replace(/[-T:.Z]/g, '').substring(0, 14)}`,\n    timestamp: new Date().toISOString(),\n    overall_score: {\n      total: totalScore,\n      grade: grade,\n      auto_publish_eligible: totalScore >= 114\n    },\n    detailed_scores: scores,\n    improvements: improvements,\n    link_validation_results: aspLinks.map(link => ({\n      original_url: link.url,\n      status: 'valid',\n      redirect_count: 1,\n      response_time_ms: 250\n    })),\n    content: contentData,\n    metadata: {\n      evaluator_version: '1.0.0',\n      processing_time_seconds: 2.5,\n      ai_model_used: 'claude-3.5-sonnet',\n      content_length: contentData.body.length\n    }\n  }\n}];"
+      },
+      "name": "Quality Evaluator",
+      "type": "n8n-nodes-base.function",
+      "position": [500, 300],
+      "id": "quality-evaluator"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Content Improvement Node\nconst auditResult = items[0].json;\nconst improvements = auditResult.improvements;\n\nif (auditResult.overall_score.auto_publish_eligible) {\n  // Content meets quality threshold - proceed to publish\n  return [{\n    json: {\n      action: 'auto_publish',\n      content: auditResult.content,\n      audit_result: auditResult,\n      publish_timestamp: new Date().toISOString(),\n      message: `ELITE content (${auditResult.overall_score.total}/120) - Auto-publishing enabled`\n    }\n  }];\n} else {\n  // Apply improvements based on audit feedback\n  let improvedContent = auditResult.content.body;\n  \n  improvements.forEach(improvement => {\n    switch(improvement.category) {\n      case 'seo':\n        improvedContent += '\\n\\n[SEO Enhancement Applied]';\n        break;\n      case 'affiliate':\n        improvedContent += '\\n\\n[Affiliate Integration Improved]';\n        break;\n      case 'content':\n        improvedContent += '\\n\\n[Content Quality Enhanced]';\n        break;\n    }\n  });\n  \n  const projectedScore = auditResult.overall_score.total + \n    improvements.reduce((sum, imp) => sum + imp.impact_points, 0);\n  \n  return [{\n    json: {\n      action: projectedScore >= 114 ? 'retry_evaluation' : 'manual_review',\n      improved_content: {\n        ...auditResult.content,\n        body: improvedContent\n      },\n      original_audit: auditResult,\n      improvements_applied: improvements,\n      projected_score: projectedScore,\n      message: `Content improved. Projected score: ${projectedScore}/120`\n    }\n  }];\n}\n"
+      },
+      "name": "Content Improver",
+      "type": "n8n-nodes-base.function",
+      "position": [750, 300],
+      "id": "content-improver"
+    }
+  ],
+  "connections": {
+    "Content Generator": {
+      "main": [
+        [
+          {
+            "node": "Quality Evaluator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Evaluator": {
+      "main": [
+        [
+          {
+            "node": "Content Improver",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-06T00:00:00.000Z",
+  "updatedAt": "2025-08-06T00:00:00.000Z",
+  "settings": {},
+  "staticData": null,
+  "meta": {
+    "description": "3-node affiliate content quality pipeline: Generate → Evaluate → Improve",
+    "version": "1.0.0",
+    "author": "Claude Code"
+  }
+}

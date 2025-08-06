@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/affiliate-ai-quality/schemas/audit_input_schema.json",
+  "title": "Affiliate Content Audit Input Schema",
+  "description": "Input schema for AI-powered affiliate content quality evaluation system",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Article title"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 100,
+          "description": "Main article content in Markdown format"
+        },
+        "meta": {
+          "type": "object",
+          "properties": {
+            "target_keyword": {
+              "type": "string",
+              "description": "Primary SEO keyword"
+            },
+            "product_category": {
+              "type": "string",
+              "enum": ["electronics", "fashion", "health", "finance", "education", "travel", "other"]
+            },
+            "asp_provider": {
+              "type": "string",
+              "enum": ["a8", "accesstrade", "valuecommerce", "rakuten", "amazon", "other"]
+            }
+          },
+          "required": ["target_keyword", "product_category", "asp_provider"]
+        }
+      },
+      "required": ["title", "body", "meta"]
+    },
+    "asp_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "ASP affiliate link URL"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "Associated product name"
+          },
+          "commission_rate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Expected commission rate percentage"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Link priority (1=highest, 5=lowest)"
+          }
+        },
+        "required": ["url", "product_name", "priority"]
+      },
+      "minItems": 1,
+      "maxItems": 10
+    },
+    "evaluation_config": {
+      "type": "object",
+      "properties": {
+        "strict_mode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable strict evaluation criteria"
+        },
+        "target_score": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 120,
+          "default": 114,
+          "description": "Minimum score required for auto-publish"
+        },
+        "check_link_validity": {
+          "type": "boolean",
+          "default": true,
+          "description": "Verify ASP link redirects and validity"
+        }
+      }
+    }
+  },
+  "required": ["content", "asp_links"]
+}

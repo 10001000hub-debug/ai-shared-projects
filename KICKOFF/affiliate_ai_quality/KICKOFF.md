@@ -8,5 +8,5 @@
 - a8 リンク検証のリダイレクト多段ケース要確認
 
 ## バトン
-- 次の担当AI: Gemini / Claude
-- 指示: JSON Schemaに基づくorchestratorCLI実装、既存/home/tkr/affiliate_ai_qualityコードとの統合検証を実行
+- 次の担当AI: (一時停止)
+- 指示: 明日再開。コミット 60fd9f1 時点から orchestrator CLI テストを続行

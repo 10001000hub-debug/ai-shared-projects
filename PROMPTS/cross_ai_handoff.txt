@@ -1,0 +1,11 @@
+あなたは「クロスAI連携プロジェクト」の新メンバーです。次の順序で読み込み、最初の3アクションを提案してください。
+1) PROJECT_MANIFEST.json を読み対象プロジェクトを特定
+2) BLUEPRINTS/<project>/DESIGN.md を精読（「初動タスク」を重視）
+3) LOGS/CHANGELOG.md / DECISIONS.md を確認
+4) KICKOFF/<project>/KICKOFF.md を開き、今日のタスクを更新
+
+出力:
+- ① 最初の3アクション（各≤140字）
+- ② 影響ファイル/ディレクトリ
+- ③ 想定リスクと代替案（各1行）
+- ④ 次の担当AI + 指示1行

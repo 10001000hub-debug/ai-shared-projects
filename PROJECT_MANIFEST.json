@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "projects": [
+    {
+      "name": "affiliate_ai_quality",
+      "blueprint": "BLUEPRINTS/affiliate_ai_quality/DESIGN.md",
+      "kickoff": "KICKOFF/affiliate_ai_quality/KICKOFF.md",
+      "source_dir": "/home/tkr/affiliate_ai_quality",
+      "logs": {
+        "changelog": "LOGS/CHANGELOG.md",
+        "decisions": "LOGS/DECISIONS.md"
+      },
+      "status": "active",
+      "last_update": "2025-08-06"
+    },
+    {
+      "name": "n8n-automation-project",
+      "blueprint": "BLUEPRINTS/n8n-automation-project/DESIGN.md",
+      "kickoff": "",
+      "source_dir": "/home/tkr/n8n-automation-project",
+      "logs": {
+        "changelog": "LOGS/CHANGELOG.md",
+        "decisions": "LOGS/DECISIONS.md"
+      },
+      "status": "active",
+      "last_update": "2025-08-06"
+    },
+    {
+      "name": "line-ai-search-bot",
+      "blueprint": "BLUEPRINTS/line-ai-search-bot/DESIGN.md",
+      "kickoff": "",
+      "source_dir": "/home/tkr/line-ai-search-bot",
+      "logs": {
+        "changelog": "LOGS/CHANGELOG.md",
+        "decisions": "LOGS/DECISIONS.md"
+      },
+      "status": "active",
+      "last_update": "2025-08-06"
+    }
+  ],
+  "conventions": {
+    "commit": "type(scope): message",
+    "ai_tagging": "commit footer に 'coauthored-by: <AI>@<model>' を付与"
+  }
+}
+EOF < /dev/null

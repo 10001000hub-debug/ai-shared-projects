@@ -1,0 +1,41 @@
+# AI株式投資支援システム - 環境変数設定ファイル
+# 使用方法: cp env_example.txt .env → 各値を実際のものに変更
+
+# プロジェクト基本設定
+PROJECT_ROOT=/home/tkr/ai-shared-projects
+PROJECT_NAME=ai_stock_analysis
+VERSION=1.0.0
+
+# データ出力設定
+SCREENER_OUTPUT=output/high_dividend.json
+ANALYSIS_RESULT=output/analysis_result.json
+REPORT_OUTPUT=output/reports/
+
+# AI API認証情報
+CLAUDE_API_KEY=your_claude_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here  
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# n8n設定
+N8N_BASE_URL=http://localhost:5679
+WEBHOOK_URL=https://your-n8n-server.com/webhook/trading-signal
+
+# 通知設定
+SLACK_BOT_TOKEN=xoxb-your-slack-bot-token
+SLACK_CHANNEL=#stock-analysis
+LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
+
+# ブローカーAPI設定
+BROKER_API_KEY=your_broker_api_key
+BROKER_API_ENDPOINT=https://api.yourbroker.com/v1/orders
+TRADING_MODE=demo
+
+# スクリーニング設定
+MIN_DIVIDEND_YIELD=3.0
+MAX_PER_RATIO=20.0
+MIN_MARKET_CAP=10000000000
+
+# リスク管理
+MAX_DAILY_TRADES=10
+MAX_TOTAL_EXPOSURE=1000000
+RISK_TOLERANCE=medium

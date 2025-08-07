@@ -1,0 +1,84 @@
+{
+  "name": "Stock AI Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "cronExpression": "0 23 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Daily Market Analysis",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 ${PROJECT_ROOT}/affiliate_ai_quality/src/orchestrator.py --input ${SCREENER_OUTPUT} --verbose"
+      },
+      "id": "screener-exec",
+      "name": "Execute Stock Screener",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "${SLACK_CHANNEL}",
+        "text": "📊 *株式分析完了* - {{ $json.timestamp }}\n\n*スコア*: {{ $json.total_score }}/120\n*推奨アクション*: {{ $json.recommendation }}"
+      },
+      "id": "slack-notification",
+      "name": "Slack Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        640,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Market Analysis": {
+      "main": [
+        [
+          {
+            "node": "Execute Stock Screener",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Stock Screener": {
+      "main": [
+        [
+          {
+            "node": "Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "Asia/Tokyo",
+    "saveExecutionProgress": true
+  },
+  "meta": {
+    "templateCreatedBy": "AI Stock Analysis System",
+    "templateId": "stock-ai-workflow-v1.0.0"
+  }
+}
